@@ -48,6 +48,7 @@
       <a href="#overview">项目概览</a>
       <a href="#center">实验中心</a>
       <a href="#poster">海报工坊</a>
+      <a href="#archive">实验存档</a>
       <a href="#resources">教学资源</a>
       <a href="#team">教学团队</a>
       <a href="#news">项目动态</a>
@@ -505,6 +506,98 @@
           <div class="preview-stage"><canvas id="posterCanvas" aria-label="商业海报实时预览"></canvas></div>
           <div class="preview-foot">提示词由浏览器本地解析，图片不会上传到服务器 · 生成的海报可用于多终端投放适配实验</div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 实验数据存档（上传 + 保存记录） ============ -->
+  <section class="section section-alt" id="archive">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">05 / 实验存档</span>
+        <h2 class="sec-title">我的实验数据存档</h2>
+        <p class="sec-lead">做完的作品一键留存：支持图片、视频、3D 模型与文字记录。默认保存在本机浏览器，随时导出备份；如需让所有人在线共享查看，可开启云端同步。</p>
+      </div>
+
+      <div class="archive-layout">
+        <!-- 左侧：上传表单 -->
+        <form class="archive-form" id="archiveForm">
+          <h3>➕ 新建存档记录</h3>
+          <label>实验名称 <b class="req">*</b>
+            <input type="text" id="arTitle" placeholder="如：抹茶饮品海报 / 侧逆光布光方案" required>
+          </label>
+          <label>记录类型
+            <select id="arType">
+              <option value="poster">🎨 海报作品</option>
+              <option value="studio">💡 布光方案</option>
+              <option value="model3d">🧊 3D模型</option>
+              <option value="report">📄 实验报告</option>
+              <option value="video">🎬 视频演示</option>
+              <option value="other">📦 其他</option>
+            </select>
+          </label>
+          <label>作者 / 姓名 <small>（选填）</small>
+            <input type="text" id="arAuthor" placeholder="如：张三 / 2023XXXX">
+          </label>
+          <label>说明备注 <small>（选填）</small>
+            <textarea id="arNote" rows="3" placeholder="记录创作思路、布光参数、实验结论等"></textarea>
+          </label>
+          <label class="ar-upload">📎 上传附件 <small>（图片 / 视频 / 模型 / 文档，可多选）</small>
+            <input type="file" id="arFiles" multiple accept="image/*,video/*,.glb,.gltf,.obj,.fbx,.pdf,.doc,.docx,.txt,.json">
+          </label>
+          <div class="ar-file-names" id="arFileNames"></div>
+
+          <div class="ar-quick-row">
+            <span>快捷存入画布作品：</span>
+            <button type="button" class="btn btn-plain btn-sm" id="arImportPoster">🖼 存当前海报</button>
+            <button type="button" class="btn btn-plain btn-sm" id="arImportStudio">💡 存当前布光</button>
+          </div>
+
+          <button type="submit" class="btn btn-primary ar-save-btn">💾 保存记录</button>
+          <p class="ar-privacy">🔒 记录默认仅存于你当前浏览器，不会自动上传。可使用下方「云端同步」自行决定是否共享。</p>
+        </form>
+
+        <!-- 右侧：记录列表 -->
+        <div class="archive-main">
+          <div class="archive-toolbar">
+            <input type="search" id="arSearch" placeholder="🔍 搜索记录（名称 / 作者 / 类型）">
+            <select id="arFilter" aria-label="按类型筛选">
+              <option value="all">全部类型</option>
+              <option value="poster">海报作品</option>
+              <option value="studio">布光方案</option>
+              <option value="model3d">3D模型</option>
+              <option value="report">实验报告</option>
+              <option value="video">视频演示</option>
+              <option value="other">其他</option>
+            </select>
+            <button type="button" class="btn btn-plain btn-sm" id="arExportBtn">⬇ 导出备份</button>
+            <label class="ar-import-btn btn btn-plain btn-sm" title="从 JSON 备份恢复记录">⬆ 导入
+              <input type="file" id="arImportFile" accept=".json,application/json" hidden>
+            </label>
+          </div>
+          <div class="archive-stats" id="arStats"></div>
+          <div class="archive-list" id="arList"></div>
+          <div class="ar-msg" id="arCloudMsg" role="status" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <!-- 云端同步面板 -->
+      <div class="cloud-panel">
+        <div class="cloud-head">
+          <div><h3>☁️ 云端同步 <span class="cloud-opt">可选</span></h3>
+            <p>把本机记录写入网站仓库（<code>records/archive.json</code>），所有访问者打开网站即可看到，真正实现"数据存在网站里"。</p>
+          </div>
+        </div>
+        <div class="cloud-tip">
+          <b>如何在本机生成令牌（只需一次）：</b>打开 <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener">GitHub Token 设置页 ↗</a> → 勾选 <code>repo</code> 权限 → 生成并复制令牌 → 粘贴到下方。令牌只保存在你的浏览器本地，不会出现在网页面源代码中。
+        </div>
+        <div class="cloud-row">
+          <input type="password" id="arToken" placeholder="粘贴 GitHub Personal Access Token（ghp_...）" autocomplete="off">
+          <button type="button" class="btn btn-primary btn-sm" id="arSyncBtn">⬆ 同步到云端</button>
+          <button type="button" class="btn btn-plain btn-sm" id="arCloudLoadBtn">🔄 加载云端记录</button>
+          <button type="button" class="btn btn-plain btn-sm" id="arClearBtn">🗑 清空本机</button>
+        </div>
+        <p class="cloud-foot">说明：图片等小附件会随记录一并同步；超过 3 MB 的大文件（如长视频、大型模型）受 GitHub 接口限制只同步文字信息，文件本体仍保留在原设备。公开读取无需令牌。</p>
       </div>
     </div>
   </section>
