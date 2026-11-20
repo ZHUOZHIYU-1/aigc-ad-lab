@@ -907,8 +907,120 @@ export function initStudio() {
       md.data[i]=a; md.data[i+1]=a; md.data[i+2]=a; md.data[i+3]=255;
     }
     oc.putImageData(od,0,0); mc.putImageData(md,0,0);
+    P3.maskCanvas=mask;   // 供轮廓挤出使用
     return { out, mask };
   }
+
+  // Douglas-Peucker 轮廓简化，降低挤出网格点数
+  function p3Simplify(pts,eps){
+    if(pts.length<5) return pts;
+    const sqd=(p,a,b)=>{ const dx=b[0]-a[0],dy=b[1]-a[1]; const L=dx*dx+dy*dy;
+      if(!L) return (p[0]-a[0])**2+(p[1]-a[1])**2;
+      let t=((p[0]-a[0])*dx+(p[1]-a[1])*dy)/L; t=Math.max(0,Math.min(1,t));
+      return (p[0]-a[0]-t*dx)**2+(p[1]-a[1]-t*dy)**2; };
+    const keep=new Uint8Array(pts.length); keep[0]=keep[pts.length-1]=1;
+    const stack=[[0,pts.length-1]];
+    while(stack.length){
+      const [s,e]=stack.pop(); let max=0,idx=-1;
+      for(let i=s+1;i<e;i++){ const d=sqd(pts[i],pts[s],pts[e]); if(d>max){max=d;idx=i;} }
+      if(max>eps*eps && idx>0){ keep[idx]=1; stack.push([s,idx],[idx,e]); }
+    }
+    return pts.filter((_,i)=>keep[i]);
+  }
+
+  // 从蒙版提取闭合轮廓环（Moore 邻域追踪），返回像素坐标点数组集合
+  function p3Contours(){
+    const {w,h}=P3;
+    if(!P3.maskCanvas) return [];
+    const img=P3.maskCanvas.getContext('2d').getImageData(0,0,w,h).data;
+    const bin=new Uint8Array(w*h);
+    for(let i=0;i<w*h;i++) bin[i]=img[i*4]>127?1:0;
+    // 8 邻域顺时针：0:E 1:SE 2:S 3:SW 4:W 5:NW 6:N 7:NE
+    const NBR=[[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]];
+    const visited=new Uint8Array(w*h);
+    const loops=[];
+    const area=p=>{ let a=0; for(let i=0;i<p.length;i++){const q=p[i],r=p[(i+1)%p.length]; a+=q[0]*r[1]-r[0]*q[1];} return a/2; };
+
+    function findSeed(){
+      for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+        const i=y*w+x;
+        if(bin[i]===1 && !visited[i]) return [x,y];
+      }
+      return null;
+    }
+    function traceOne(sx,sy){
+      const contour=[[sx,sy]];
+      let cx=sx, cy=sy, prevDir=4;
+      const maxSteps=w*h*8;
+      for(let step=0;step<maxSteps;step++){
+        const start=(prevDir+1)%8;
+        let found=false;
+        for(let k=0;k<8;k++){
+          const d=(start+k)%8;
+          const nx=cx+NBR[d][0], ny=cy+NBR[d][1];
+          if(nx>=0&&ny>=0&&nx<w&&ny<h && bin[ny*w+nx]===1){
+            cx=nx; cy=ny; prevDir=(d+4)%8;
+            contour.push([cx,cy]); found=true; break;
+          }
+        }
+        if(!found) break;
+        if(cx===sx && cy===sy) break;
+      }
+      // flood fill 标记整个连通域已访问，避免下次重复追踪该区域
+      const stack=[[sx,sy]];
+      while(stack.length){
+        const [x,y]=stack.pop(), i=y*w+x;
+        if(x<0||y<0||x>=w||y>=h||visited[i]||bin[i]!==1) continue;
+        visited[i]=1;
+        stack.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
+      }
+      return contour;
+    }
+    let seed;
+    while((seed=findSeed())!==null){
+      const c=traceOne(seed[0],seed[1]);
+      const a=Math.abs(area(c));
+      if(c.length>8 && a>12) loops.push({pts:p3Simplify(c,Math.max(1.2,w*0.004)), a});
+    }
+    return loops.sort((p,q)=>q.a-p.a);
+  }
+
+  // 用轮廓挤出生成有厚度的实心 3D 小熊模型
+  function p3BuildExtruded(outTex,sideColor,depth){
+    const {w,h}=P3;
+    const loops=p3Contours();
+    const group=new THREE.Group();
+    if(!loops.length) return null;
+    const thick=Math.max(6,Math.round(w*0.14*depth));
+    const bevel=Math.max(1,Math.round(w*0.007));
+    // shape 用图像像素坐标重映射到中心，y 翻转使模型正立
+    const toVec=p=>new THREE.Vector2(p[0]-w/2, h/2-p[1]);
+    // 每个连通域作为独立实心形状（避免分离主体被误当孔洞）
+    const shapes=loops.map(loop=>{
+      const pts=loop.pts, fv=toVec(pts[0]);
+      const s=new THREE.Shape();
+      s.moveTo(fv.x,fv.y);
+      for(let i=1;i<pts.length;i++){ const v=toVec(pts[i]); s.lineTo(v.x,v.y); }
+      s.closePath();
+      return s;
+    });
+    const uvgen={
+      generateTopUV:(geo,v,ia,ib,ic)=>[ia,ib,ic].map(i=>
+        new THREE.Vector2((v[i*3]+w/2)/w, 0.5+v[i*3+1]/h)),
+      generateSideWallUV:()=>[new THREE.Vector2(0,0),new THREE.Vector2(1,0),new THREE.Vector2(1,1),new THREE.Vector2(0,1)],
+    };
+    const geo=new THREE.ExtrudeGeometry(shapes,{
+      depth:thick, steps:1, bevelEnabled:true, bevelThickness:bevel, bevelSize:bevel, bevelSegments:2,
+      curveSegments:2, UVGenerator:uvgen,
+    });
+    const capMat=new THREE.MeshStandardMaterial({map:outTex,roughness:.62,metalness:.03,side:THREE.DoubleSide});
+    const sideMat=new THREE.MeshStandardMaterial({color:new THREE.Color(sideColor),roughness:.6,metalness:.06});
+    const mesh=new THREE.Mesh(geo,[capMat,sideMat]);
+    mesh.position.z=-thick/2;   // 厚度居中
+    group.add(mesh);
+    return group;
+  }
+
   function p3Build(mode,depth,threshold,sideColor){
     const {w,h,canvas}=P3;
     const ratio=h/w, PW=3, PH=3*ratio;
@@ -928,26 +1040,28 @@ export function initStudio() {
       const back=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),new THREE.MeshStandardMaterial({color:new THREE.Color(sideColor),roughness:.8,side:THREE.DoubleSide}));
       back.position.z=-depth*1.3; group.add(back);
     } else if(mode==='cutout'){
-      // 抠图立体：多层带 alpha 的平面沿 z 堆叠，形成有厚度的主体轮廓。
-      // 最前层贴抠好的原图，中间层用侧面色并做渐变，最后加一层背面封口，避免"纸片感"。
+      // 抠图立体（真·3D）：从蒙版提取主体轮廓，用 ExtrudeGeometry 挤出成实心立体模型。
+      // 有真实侧面和倒角，正面贴彩色抠图、侧面用侧色，旋转任意角度都是立体小熊。
       const {out,mask}=p3MakeCutout(threshold);
-      const tex=p3Texture(out), maskTex=p3Texture(mask);
-      const layers=Math.max(5,Math.round(6+depth*12));
-      const thickness=depth*0.9;
-      const sideBase=new THREE.Color(sideColor);
+      const tex=p3Texture(out);
+      const extruded=p3BuildExtruded(tex,sideColor,depth);
+      if(extruded){
+        return extruded;
+      }
+      // 回退方案：轮廓提取失败时，用每层都贴彩色图的堆叠平面（保证不是白纸）
+      const maskTex=p3Texture(mask);
+      const layers=Math.max(6,Math.round(8+depth*10));
+      const thickness=depth*0.7;
+      const tint=new THREE.Color(sideColor).lerp(new THREE.Color(0xffffff),0.55);
       for(let i=0;i<layers;i++){
-        const front=(i===layers-1), back=(i===0);
-        const t=i/(layers-1); // 0(背) → 1(前)
-        const sideCol=sideBase.clone().multiplyScalar(0.72+0.28*t);
+        const front=(i===layers-1);
         const m=new THREE.MeshStandardMaterial({
-          map:front?tex:null, alphaMap:maskTex,
-          color:front?0xffffff:sideCol,
-          transparent:true, alphaTest:.35, roughness:.6, metalness:.05, side:THREE.DoubleSide,
-          depthWrite:front, // 仅前层写深度，减少透明层排序穿帮
+          map:tex, alphaMap:maskTex, color:front?0xffffff:tint,
+          transparent:true, alphaTest:.3, roughness:.6, metalness:.03,
+          side:THREE.DoubleSide, depthWrite:false,
         });
         const mesh=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),m);
         mesh.position.z=(i-(layers-1)/2)*(thickness/layers);
-        if(back) mesh.scale.set(0.985,0.985,1);
         group.add(mesh);
       }
     } else if(mode==='cylinder'){
