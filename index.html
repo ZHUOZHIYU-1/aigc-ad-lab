@@ -386,7 +386,7 @@
             <div class="p3-label">转换模式</div>
             <div class="p3-modes" id="p3Modes">
               <button class="p3-mode" data-p3mode="relief"><span>🏔</span><b>照片浮雕</b><small>整图按亮度起伏，不抠背景，适合风景/纹理</small></button>
-              <button class="p3-mode active" data-p3mode="cutout"><span>🎯</span><b>抠图立体</b><small>智能去背景+轮廓挤出，生成有厚度的立体模型</small></button>
+              <button class="p3-mode active" data-p3mode="cutout"><span>🎯</span><b>圆润立体</b><small>智能去背景+距离场充气，生成圆润饱满的立体玩偶</small></button>
               <button class="p3-mode" data-p3mode="cylinder"><span>🧴</span><b>瓶身环绕</b><small>照片缠圆柱，适合饮料瓶/易拉罐</small></button>
               <button class="p3-mode" data-p3mode="card"><span>🃏</span><b>立体卡片</b><small>带厚度展牌，最快生成</small></button>
             </div>
@@ -395,7 +395,7 @@
               <label id="p3ThreshRow">抠图灵敏度 <input type="range" id="p3Thresh" min="20" max="110" value="62"><output id="p3ThreshVal">62</output></label>
               <label>侧面颜色 <input type="color" id="p3Side" value="#d9dde3"></label>
             </div>
-            <div class="p3-tip" id="p3Tip">默认「抠图立体」会自动去背景，并把主体轮廓挤出成有厚度、有侧面的立体模型，可 360° 旋转。若主体被误删或背景残留，微调"抠图灵敏度"即可。</div>
+            <div class="p3-tip" id="p3Tip">默认「圆润立体」会自动去背景，并按主体形状自动充气：宽大处饱满鼓起、细窄处自然收薄，正反两面都贴彩色图，转起来是圆润的立体玩偶。主体被误删调小"抠图灵敏度"，背景残留调大。"立体强度"控制鼓起的厚度。</div>
           </div>
           <div class="modal-foot no-print"><button class="btn btn-plain btn-sm" data-p3close>取消</button><button class="btn btn-primary btn-sm" id="p3AddBtn" disabled>✨ 加入影棚</button></div>
         </div>
