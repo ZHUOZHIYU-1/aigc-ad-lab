@@ -3,6 +3,7 @@
    ============================================================ */
 import { initStudio } from './studio.js?v=20251120g';
 import { initPoster } from './poster.js';
+import { initRecords } from './records.js?v=20251121b';
 
 /* ---------- 22 步数据（源自申报书） ---------- */
 const STEPS = [
@@ -66,6 +67,7 @@ function bindSearch() {
     { kw:['效能','CTR','转化','诊断','曝光','记忆度','指标'], target:'results', label:'实验结果与结论' },
     { kw:['步骤','操作','22','流程','阶段','学时'], target:'center', label:'实验中心' },
     { kw:['团队','教师','负责人','阎伟','张金'], target:'team', label:'教学团队' },
+    { kw:['存档','保存','上传','记录','数据','作品集','备份','导出','云端'], target:'archive', label:'实验数据存档' },
     { kw:['资源','课件','指导书','视频','题库','支持'], target:'resources', label:'教学资源' },
     { kw:['共享','排行','计划','服务','应用'], target:'sharing', label:'应用与共享' },
     { kw:['通知','公告','动态','新闻','进展'], target:'news', label:'项目动态' },
@@ -175,6 +177,7 @@ function boot() {
   bindCounters();
   initStudio();
   initPoster();
+  initRecords();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
