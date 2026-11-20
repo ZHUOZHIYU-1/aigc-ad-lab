@@ -1021,6 +1021,64 @@ export function initStudio() {
     return group;
   }
 
+  // Chamfer 距离变换：每个前景(主体)像素到最近背景像素的距离，用于自动"充气"
+  function p3DistanceTransform(maskCanvas){
+    const {w,h}=P3;
+    const data=maskCanvas.getContext('2d').getImageData(0,0,w,h).data;
+    const d=new Float32Array(w*h), INF=1e6;
+    for(let i=0;i<w*h;i++) d[i]=(data[i*4]>127)?INF:0;
+    for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+      const i=y*w+x; if(!d[i]) continue;
+      if(x>0) d[i]=Math.min(d[i],d[i-1]+1);
+      if(y>0) d[i]=Math.min(d[i],d[i-w]+1);
+      if(x>0&&y>0) d[i]=Math.min(d[i],d[i-w-1]+1.4142);
+      if(x<w-1&&y>0) d[i]=Math.min(d[i],d[i-w+1]+1.4142);
+    }
+    for(let y=h-1;y>=0;y--) for(let x=w-1;x>=0;x--){
+      const i=y*w+x; if(!d[i]) continue;
+      if(x<w-1) d[i]=Math.min(d[i],d[i+1]+1);
+      if(y<h-1) d[i]=Math.min(d[i],d[i+w]+1);
+      if(x<w-1&&y<h-1) d[i]=Math.min(d[i],d[i+w+1]+1.4142);
+      if(x>0&&y<h-1) d[i]=Math.min(d[i],d[i+w-1]+1.4142);
+    }
+    let dMax=1; for(let i=0;i<w*h;i++) if(d[i]<INF && d[i]>dMax) dMax=d[i];
+    return {d,dMax};
+  }
+
+  // 圆润立体：距离场驱动的双凸面——中心饱满、边缘收薄，正反两面都贴彩色图。
+  // 宽大的头部/身体自动鼓得高，细窄的手臂/耳朵自然变薄，接近真实玩偶的立体感。
+  function p3BuildRounded(outTex,maskCanvas,depth){
+    const {w,h}=P3;
+    const ratio=h/w, PW=3, PH=3*ratio;
+    const {d,dMax}=p3DistanceTransform(maskCanvas);
+    const maskTex=p3Texture(maskCanvas);
+    const segX=112, segY=Math.max(20,Math.round(segX*ratio));
+    const halfThick=0.12+depth*1.05;
+    const group=new THREE.Group();
+    const makeSide=sign=>{
+      const geo=new THREE.PlaneGeometry(PW,PH,segX,segY);
+      const pos=geo.attributes.position, uv=geo.attributes.uv;
+      for(let i=0;i<pos.count;i++){
+        const u=uv.getX(i), v=uv.getY(i);
+        const px=Math.min(w-1,Math.max(0,Math.floor(u*w)));
+        const py=Math.min(h-1,Math.max(0,Math.floor((1-v)*h)));
+        const dist=d[py*w+px];
+        const t=dist>=1e5?0:Math.min(1,dist/dMax);
+        const dome=Math.sqrt(Math.max(0,1-(1-t)*(1-t)));   // 球冠曲线：中心饱满、边缘平滑收薄
+        pos.setZ(i, sign*halfThick*dome);
+      }
+      geo.computeVertexNormals();
+      const mat=new THREE.MeshStandardMaterial({
+        map:outTex, alphaMap:maskTex, transparent:true, alphaTest:0.42,
+        roughness:.56, metalness:.02, side:THREE.DoubleSide, depthWrite:true,
+      });
+      return new THREE.Mesh(geo,mat);
+    };
+    group.add(makeSide(1));   // 正面鼓起
+    group.add(makeSide(-1));  // 背面鼓起（也贴彩色图，转到背面不再白纸）
+    return group;
+  }
+
   function p3Build(mode,depth,threshold,sideColor){
     const {w,h,canvas}=P3;
     const ratio=h/w, PW=3, PH=3*ratio;
@@ -1040,15 +1098,20 @@ export function initStudio() {
       const back=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),new THREE.MeshStandardMaterial({color:new THREE.Color(sideColor),roughness:.8,side:THREE.DoubleSide}));
       back.position.z=-depth*1.3; group.add(back);
     } else if(mode==='cutout'){
-      // 抠图立体（真·3D）：从蒙版提取主体轮廓，用 ExtrudeGeometry 挤出成实心立体模型。
-      // 有真实侧面和倒角，正面贴彩色抠图、侧面用侧色，旋转任意角度都是立体小熊。
+      // 抠图立体（真·3D 圆润版）：距离场驱动双凸立体，中心饱满、边缘收薄，
+      // 正反两面都贴彩色抠图。头部/身体鼓得高、手臂/耳朵自然变薄，接近真实玩偶。
       const {out,mask}=p3MakeCutout(threshold);
       const tex=p3Texture(out);
+      const rounded=p3BuildRounded(tex,mask,depth);
+      if(rounded){
+        return rounded;
+      }
+      // 回退方案A：距离场失败时用轮廓挤出
       const extruded=p3BuildExtruded(tex,sideColor,depth);
       if(extruded){
         return extruded;
       }
-      // 回退方案：轮廓提取失败时，用每层都贴彩色图的堆叠平面（保证不是白纸）
+      // 回退方案B：轮廓提取失败时，用每层都贴彩色图的堆叠平面（保证不是白纸）
       const maskTex=p3Texture(mask);
       const layers=Math.max(6,Math.round(8+depth*10));
       const thickness=depth*0.7;
