@@ -799,7 +799,7 @@ export function initStudio() {
      四种模式：照片浮雕(亮度转深度) / 抠图立体(去背景挤出) / 瓶身环绕(圆柱贴图) / 立体卡片。
      生成的物体与手工添加物体一致：可选中、移动、旋转、缩放、改名、复制、删除、撤销。
   */
-  const P3 = { img:null, canvas:null, ctx:null, data:null, w:0, h:0, mode:'relief', ready:false };
+  const P3 = { img:null, canvas:null, ctx:null, data:null, w:0, h:0, mode:'cutout', ready:false };
 
   function p3LoadImage(file){
     return new Promise((res,rej)=>{
@@ -829,23 +829,82 @@ export function initStudio() {
     t.anisotropy=renderer.capabilities.getMaxAnisotropy();
     return t;
   }
-  // 依据四角背景色做颜色距离抠图：返回去背景图 + 灰度 alpha 掩膜
+  // 智能抠图：边缘洪水填充（flood fill）+ 轮廓保护 + 边缘羽化。
+  // 相比"四角颜色距离"，能正确处理白底白物、浅底浅物等主体/背景近色的情况：
+  // 只移除"与画面边缘连通且颜色接近背景"的区域，主体内部近色像素被轮廓保护而保留。
   function p3MakeCutout(threshold){
     const {w,h,data}=P3;
-    const corners=[[2,2],[w-3,2],[2,h-3],[w-3,h-3]];
-    let br=0,bg=0,bb=0,n=0;
-    corners.forEach(([x,y])=>{ const i=(Math.max(0,y)*w+Math.max(0,x))*4; br+=data[i]; bg+=data[i+1]; bb+=data[i+2]; n++; });
-    br/=n; bg/=n; bb/=n;
+    const N=w*h;
+
+    // 1) 估计背景色：取四条边像素的中位数（比四角平均更抗噪/抗阴影/抗水印）
+    const brs=[],bgs=[],bbs=[];
+    const step=Math.max(1,Math.floor(Math.min(w,h)/48));
+    const take=(x,y)=>{ const i=(y*w+x)*4; brs.push(data[i]); bgs.push(data[i+1]); bbs.push(data[i+2]); };
+    for(let x=0;x<w;x+=step){ take(x,0); take(x,h-1); }
+    for(let y=0;y<h;y+=step){ take(0,y); take(w-1,y); }
+    const median=a=>{ a.sort((p,q)=>p-q); return a[a.length>>1]||0; };
+    const br=median(brs), bg=median(bgs), bb=median(bbs);
+
+    // 2) 颜色距离阈值：UI 的 20~110 映射到合理容差
+    const tol=Math.max(16,threshold*2.0);
+    const colorDist=i=>{ const p=i*4; const dr=data[p]-br,dg=data[p+1]-bg,db=data[p+2]-bb; return Math.sqrt(dr*dr+dg*dg+db*db); };
+
+    // 3) 预计算梯度幅值（相隔2px采样，抗噪），用于识别主体轮廓，作为洪水填充的"墙"
+    const grad=new Uint16Array(N);
+    for(let y=2;y<h-2;y++) for(let x=2;x<w-2;x++){
+      const i=y*w+x, l=(i-2)*4, r=(i+2)*4, u=(i-2*w)*4, dn=(i+2*w)*4;
+      const gx=Math.abs(data[r]-data[l])+Math.abs(data[r+1]-data[l+1])+Math.abs(data[r+2]-data[l+2]);
+      const gy=Math.abs(data[dn]-data[u])+Math.abs(data[dn+1]-data[u+1])+Math.abs(data[dn+2]-data[u+2]);
+      grad[i]=Math.min(765,gx+gy);
+    }
+    // 梯度墙阈值：主体边缘（如小熊的浅色轮廓线）处的跳变超过它即阻止扩散
+    const gradWall=90;
+
+    // 4) 从四边种子做 BFS，标记"与边缘连通且接近背景色"的像素为背景
+    const visited=new Uint8Array(N), isBg=new Uint8Array(N), queue=new Int32Array(N);
+    let head=0,tail=0;
+    const push=idx=>{ if(!visited[idx]){ visited[idx]=1; queue[tail++]=idx; } };
+    for(let x=0;x<w;x++){ push(x); push((h-1)*w+x); }
+    for(let y=0;y<h;y++){ push(y*w); push(y*w+w-1); }
+    while(head<tail){
+      const idx=queue[head++];
+      if(colorDist(idx)>tol) continue;           // 离背景色够远 → 主体，停止扩散
+      if(grad[idx]>gradWall) continue;            // 遇到轮廓边缘 → 停止，保护主体内部近色区域
+      isBg[idx]=1;
+      const x=idx%w, y=(idx/w)|0;
+      if(x>0)push(idx-1); if(x<w-1)push(idx+1);
+      if(y>0)push(idx-w); if(y<h-1)push(idx+w);
+    }
+
+    // 4) 形态学收尾：填掉主体内部的小洞（去孤立背景斑），并做羽化边缘
     const out=document.createElement('canvas'); out.width=w; out.height=h;
     const oc=out.getContext('2d'); const od=oc.createImageData(w,h);
     const mask=document.createElement('canvas'); mask.width=w; mask.height=h;
     const mc=mask.getContext('2d'); const md=mc.createImageData(w,h);
-    for(let p=0;p<w*h;p++){
+    const closed=new Uint8Array(isBg);
+    for(let y=1;y<h-1;y++) for(let x=1;x<w-1;x++){
+      const i=y*w+x;
+      if(!isBg[i]) continue;
+      // 若某背景像素被大量主体包围（小洞），则填为主体
+      let obj=0;
+      for(let dy=-2;dy<=2;dy+=2) for(let dx=-2;dx<=2;dx+=2){ if(!isBg[(y+dy)*w+(x+dx)]) obj++; }
+      if(obj>=7) closed[i]=0;
+    }
+    for(let p=0;p<N;p++){
       const i=p*4;
-      const dist=Math.sqrt((data[i]-br)**2+(data[i+1]-bg)**2+(data[i+2]-bb)**2);
-      const a=dist<threshold?0:255;
+      let a=closed[p]?0:255;
+      // 羽化：主体边缘向内 1px 半透明，减少锯齿
+      if(a===255){
+        const x=p%w,y=(p/w)|0;
+        let nearBg=false;
+        for(let dy=-1;dy<=1&&!nearBg;dy++)for(let dx=-1;dx<=1;dx++){
+          const nx=x+dx,ny=y+dy; if(nx<0||ny<0||nx>=w||ny>=h)continue;
+          if(closed[ny*w+nx]){ nearBg=true; break; }
+        }
+        if(nearBg) a=165;
+      }
       od.data[i]=data[i]; od.data[i+1]=data[i+1]; od.data[i+2]=data[i+2]; od.data[i+3]=a;
-      const m=a; md.data[i]=m; md.data[i+1]=m; md.data[i+2]=m; md.data[i+3]=255;
+      md.data[i]=a; md.data[i+1]=a; md.data[i+2]=a; md.data[i+3]=255;
     }
     oc.putImageData(od,0,0); mc.putImageData(md,0,0);
     return { out, mask };
@@ -869,18 +928,26 @@ export function initStudio() {
       const back=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),new THREE.MeshStandardMaterial({color:new THREE.Color(sideColor),roughness:.8,side:THREE.DoubleSide}));
       back.position.z=-depth*1.3; group.add(back);
     } else if(mode==='cutout'){
-      // 抠图立体：多层带 alpha 的平面沿 z 堆叠，形成有厚度的主体轮廓
+      // 抠图立体：多层带 alpha 的平面沿 z 堆叠，形成有厚度的主体轮廓。
+      // 最前层贴抠好的原图，中间层用侧面色并做渐变，最后加一层背面封口，避免"纸片感"。
       const {out,mask}=p3MakeCutout(threshold);
       const tex=p3Texture(out), maskTex=p3Texture(mask);
-      const layers=Math.max(3,Math.round(3+depth*8));
+      const layers=Math.max(5,Math.round(6+depth*12));
+      const thickness=depth*0.9;
+      const sideBase=new THREE.Color(sideColor);
       for(let i=0;i<layers;i++){
-        const front=(i===layers-1);
+        const front=(i===layers-1), back=(i===0);
+        const t=i/(layers-1); // 0(背) → 1(前)
+        const sideCol=sideBase.clone().multiplyScalar(0.72+0.28*t);
         const m=new THREE.MeshStandardMaterial({
-          map:front?tex:null, alphaMap:maskTex, color:front?0xffffff:new THREE.Color(sideColor),
-          transparent:true, alphaTest:.42, roughness:.6, metalness:.05, side:THREE.DoubleSide,
+          map:front?tex:null, alphaMap:maskTex,
+          color:front?0xffffff:sideCol,
+          transparent:true, alphaTest:.35, roughness:.6, metalness:.05, side:THREE.DoubleSide,
+          depthWrite:front, // 仅前层写深度，减少透明层排序穿帮
         });
         const mesh=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),m);
-        mesh.position.z=(i-(layers-1)/2)*(depth*0.6/layers);
+        mesh.position.z=(i-(layers-1)/2)*(thickness/layers);
+        if(back) mesh.scale.set(0.985,0.985,1);
         group.add(mesh);
       }
     } else if(mode==='cylinder'){
