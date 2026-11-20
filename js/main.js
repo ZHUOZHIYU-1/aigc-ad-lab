@@ -1,7 +1,7 @@
 /* ============================================================
    门户站点交互：导航 / 22步 / 站内检索 / 滚动动画 / 数字统计
    ============================================================ */
-import { initStudio } from './studio.js?v=20251120g';
+import { initStudio } from './studio.js?v=20251121r';
 import { initPoster } from './poster.js';
 import { initRecords } from './records.js?v=20251121b';
 
