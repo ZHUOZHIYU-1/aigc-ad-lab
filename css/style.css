@@ -639,3 +639,84 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border:0;border-radiu
   #reportDiagram{max-width:100%!important}
   .report-note,.report-table td,.report-diagram-wrap{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+
+/* ============================================================
+   实验数据存档模块
+   ============================================================ */
+.archive-layout{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:start}
+.archive-form{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px}
+.archive-form h3{margin:0 0 2px;font-size:1.05rem;color:var(--primary)}
+.archive-form label{display:flex;flex-direction:column;gap:5px;font-size:.82rem;font-weight:600;color:#334155}
+.archive-form label small{font-weight:400;color:var(--muted2)}
+.archive-form .req{color:#e11d48}
+.archive-form input[type=text],.archive-form select,.archive-form textarea,.archive-toolbar input,.archive-toolbar select,
+.cloud-row input{width:100%;border:1px solid var(--border2);border-radius:8px;padding:9px 12px;font-size:.86rem;color:var(--text);background:#fbfdff;outline:none;transition:.2s}
+.archive-form input:focus,.archive-form select:focus,.archive-form textarea:focus,.archive-toolbar input:focus,.archive-toolbar select:focus,.cloud-row input:focus{border-color:var(--primary2);box-shadow:0 0 0 3px rgba(29,95,208,.12)}
+.archive-form textarea{resize:vertical;min-height:64px}
+.ar-upload{border:1.5px dashed var(--border2)!important;background:#f7faff;border-radius:10px;padding:12px!important;cursor:pointer;transition:.2s}
+.ar-upload:hover{border-color:var(--primary2)!important;background:#eef4ff}
+.ar-upload input{font-size:.76rem;color:var(--muted)}
+.ar-file-names{display:flex;flex-direction:column;gap:4px;font-size:.76rem;color:var(--muted)}
+.ar-file-names em{color:var(--muted2);font-style:normal;margin-left:6px}
+.ar-quick-row{display:flex;flex-direction:column;gap:8px;padding-top:4px;border-top:1px dashed var(--border)}
+.ar-quick-row span{font-size:.76rem;color:var(--muted)}
+.ar-quick-row .btn{width:100%}
+.ar-save-btn{width:100%;margin-top:2px}
+.ar-privacy{font-size:.72rem;color:var(--muted);margin:0;line-height:1.5}
+
+.archive-main{display:flex;flex-direction:column;gap:14px;min-width:0}
+.archive-toolbar{display:flex;gap:10px;flex-wrap:wrap}
+.archive-toolbar input[type=search]{flex:1;min-width:200px}
+.archive-toolbar select{width:auto;min-width:130px}
+.ar-import-btn{position:relative;overflow:hidden;cursor:pointer}
+.archive-stats{display:flex;gap:8px;flex-wrap:wrap;font-size:.76rem;color:var(--muted)}
+.archive-stats span{background:#eef4ff;border:1px solid var(--border);border-radius:100px;padding:4px 12px}
+.archive-stats b{color:var(--primary2)}
+.archive-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;max-height:620px;overflow:auto;padding:2px}
+.ar-empty{grid-column:1/-1;padding:44px 20px;text-align:center;color:var(--muted);border:1.5px dashed var(--border2);border-radius:var(--radius);font-size:.88rem}
+.ar-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:0 4px 16px rgba(15,42,90,.05);display:flex;flex-direction:column;gap:8px}
+.ar-card-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.72rem}
+.ar-type{background:var(--grad);color:#fff;border-radius:100px;padding:3px 10px;font-weight:600}
+.ar-badge-cloud,.ar-badge-local{border-radius:100px;padding:2px 8px;font-size:.68rem}
+.ar-badge-cloud{background:#dcfce7;color:#15803d}
+.ar-badge-local{background:#f1f5f9;color:#64748b}
+.ar-card-top time{margin-left:auto;color:var(--muted2)}
+.ar-card h4{margin:0;font-size:.98rem;color:#0f2a5a}
+.ar-author{font-size:.76rem;color:var(--muted)}
+.ar-note{margin:0;font-size:.8rem;color:#475569;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.ar-thumbs{display:flex;gap:6px;flex-wrap:wrap}
+.ar-thumbs img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--border)}
+.ar-files{display:flex;flex-direction:column;gap:5px}
+.ar-file{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f7faff;border:1px solid var(--border);border-radius:7px;padding:6px 10px;font-size:.74rem;color:var(--text);cursor:pointer;text-align:left;transition:.2s}
+.ar-file:hover{background:#eef4ff;border-color:var(--primary2)}
+.ar-file span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ar-file em{font-style:normal;color:var(--muted2);white-space:nowrap}
+.ar-card-actions{display:flex;justify-content:flex-end;margin-top:auto;padding-top:4px}
+.ar-del{background:none;border:0;color:#e11d48;font-size:.74rem;cursor:pointer;padding:4px 8px;border-radius:6px}
+.ar-del:hover{background:#fef2f2}
+.ar-msg{min-height:1.4em;font-size:.82rem;color:var(--muted);padding:8px 12px;border-radius:8px}
+.ar-msg.ok{background:#ecfdf5;color:#047857}
+.ar-msg.err{background:#fef2f2;color:#b91c1c}
+.ar-msg.warn{background:#fffbeb;color:#b45309}
+
+.cloud-panel{margin-top:24px;background:linear-gradient(135deg,#f0f6ff,#faf5ff);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+.cloud-head h3{margin:0 0 6px;font-size:1.05rem;color:var(--primary)}
+.cloud-opt{font-size:.68rem;font-weight:600;color:var(--accent2);background:#ede9fe;border-radius:100px;padding:2px 9px;vertical-align:middle}
+.cloud-head p{margin:0;font-size:.82rem;color:var(--muted)}
+.cloud-head code,.cloud-tip code{background:#e2e8f0;border-radius:4px;padding:1px 5px;font-size:.78em}
+.cloud-tip{margin:14px 0;font-size:.78rem;color:#475569;line-height:1.7;background:#fff;border:1px solid var(--border);border-radius:9px;padding:12px 14px}
+.cloud-tip a{color:var(--primary2);text-decoration:underline}
+.cloud-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.cloud-row input{flex:1;min-width:240px}
+.cloud-foot{margin:12px 0 0;font-size:.72rem;color:var(--muted);line-height:1.6}
+
+@media(max-width:900px){
+  .archive-layout{grid-template-columns:1fr}
+  .archive-list{max-height:none}
+}
+@media(max-width:600px){
+  .archive-toolbar input[type=search]{min-width:100%}
+  .cloud-row input{min-width:100%}
+  .cloud-row .btn{flex:1}
+  .archive-form{padding:18px}
+}
