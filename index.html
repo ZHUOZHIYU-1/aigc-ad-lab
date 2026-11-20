@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d3b8f">
+  <title>AIGC辅助的商业广告创意与拍摄制作虚拟仿真实验 - 实验空间 | 山西应用科技学院</title>
+  <meta name="description" content="山西应用科技学院“AIGC辅助的商业广告创意与拍摄制作虚拟仿真实验”教学项目门户：虚拟影棚布光仿真、AIGC人机协同创意、多终端适配与投放效能诊断，22步交互实验，虚实结合。">
+  <meta name="keywords" content="虚拟仿真实验,实验空间,ilab-x,AIGC,商业广告,影棚布光,山西应用科技学院,视觉传达设计">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d3b8f'/%3E%3Cpath fill='%23fff' d='M16 5 6 10v12l10 5 10-5V10L16 5Z'/%3E%3C/svg%3E">
+  <script type="importmap">
+  { "imports": {
+    "three": "./vendor/three.module.js",
+    "three/addons/controls/OrbitControls.js": "./vendor/OrbitControls.js",
+    "three/addons/loaders/GLTFLoader.js": "./vendor/loaders/GLTFLoader.js"
+  } }
+  </script>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+<!-- ============ 顶部工具条 ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <div class="topbar-left">
+      <span class="topbar-tag">国家虚拟仿真实验教学项目共享服务平台 · 课程展示</span>
+    </div>
+    <div class="topbar-right">
+      <a href="https://www.ilab-x.com/" target="_blank" rel="noopener">实验空间平台 ↗</a>
+      <span class="topbar-sep"></span>
+      <a href="#support">帮助中心</a>
+      <span class="topbar-sep"></span>
+      <span>山西应用科技学院</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 主导航 ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="container nav-inner">
+    <a class="brand" href="#home" aria-label="返回首页">
+      <span class="brand-mark" aria-hidden="true">◈</span>
+      <span class="brand-text"><b>AIGC</b> 广告虚拟仿真实验</span>
+      <span class="brand-school">山西应用科技学院</span>
+    </a>
+    <nav class="main-nav" id="mainNav" aria-label="主导航">
+      <a href="#home">首页</a>
+      <a href="#overview">项目概览</a>
+      <a href="#center">实验中心</a>
+      <a href="#poster">海报工坊</a>
+      <a href="#resources">教学资源</a>
+      <a href="#team">教学团队</a>
+      <a href="#news">项目动态</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="#lab">进入实验 <span aria-hidden="true">→</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false" aria-controls="mainNav"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ============ Hero Banner ============ -->
+  <section class="hero" id="home">
+    <div class="hero-bg" aria-hidden="true"><div class="hero-grid"></div><div class="glow g1"></div><div class="glow g2"></div></div>
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <div class="hero-breadcrumb">首页 <span>/</span> 虚拟仿真实验教学项目 <span>/</span> 设计学类</div>
+        <div class="hero-badges">
+          <span class="hbadge hbadge-blue">2026年度"人工智能+"虚拟仿真实验教学项目</span>
+          <span class="hbadge hbadge-green">申报方向：未来信息</span>
+        </div>
+        <h1>AIGC 辅助的商业广告创意<br>与拍摄制作虚拟仿真实验</h1>
+        <p class="hero-lead">还原品牌广告从项目解读、策略定位、创意生成、影棚布光预演、多终端适配到投放回收与效能诊断的完整流程。高成本、不可逆环节在虚拟环境中反复训练，方案经仿真验证后回流实训室实拍。</p>
+        <div class="hero-info">
+          <div><span>推荐学校</span><b>山西应用科技学院</b></div>
+          <div><span>项目负责人</span><b>阎伟</b></div>
+          <div><span>专业类代码</span><b>1305 设计学类</b></div>
+          <div><span>实验类型</span><b>综合设计型</b></div>
+        </div>
+        <div class="hero-team">
+          <span class="hero-team-label">项目团队</span>
+          <div class="hero-team-list">
+            <span class="ht-lead">阎伟<small>负责人</small></span>
+            <span>张金</span>
+            <span>李淼</span>
+            <span>刘鑫</span>
+            <span>王任菲</span>
+          </div>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" href="#lab">进入虚拟实验室 <span aria-hidden="true">→</span></a>
+          <a class="btn btn-outline btn-lg" href="#overview">查看项目详情</a>
+        </div>
+        <div class="hero-search">
+          <span class="search-label">站内检索</span>
+          <div class="search-box">
+            <input type="text" id="siteSearch" placeholder="搜索：布光、AIGC、多终端、效能诊断…" aria-label="站内搜索">
+            <button id="searchBtn" aria-label="搜索">🔍</button>
+          </div>
+          <div class="hot-words">热搜：<a href="#lab">虚拟影棚</a><a href="#ai">AIGC创意</a><a href="#steps">22步操作</a><a href="#metrics">效能指标</a></div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-screen">
+          <div class="screen-head"><span class="s-dot r"></span><span class="s-dot y"></span><span class="s-dot g"></span><span>虚拟影棚 · 布光预演系统</span></div>
+          <div class="screen-body">
+            <div class="s-stage">
+              <div class="s-product"></div>
+              <div class="s-light k"></div><div class="s-light f"></div><div class="s-light m"></div>
+              <div class="s-beam sb1"></div><div class="s-beam sb2"></div><div class="s-beam sb3"></div>
+            </div>
+            <div class="s-panel">
+              <div class="s-ptitle">布光控制台</div>
+              <div class="s-preset active">大平光</div><div class="s-preset">伦勃朗光</div>
+              <div class="s-preset">侧逆光</div><div class="s-preset">蝴蝶光</div>
+              <div class="s-slider"><span>光强</span><i></i></div>
+              <div class="s-slider"><span>色温</span><i></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-float hf1">◉ 物理光照实时渲染</div>
+        <div class="hero-float hf2">✓ 22 步交互操作</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 数据看板 ============ -->
+  <section class="data-strip" aria-label="项目数据">
+    <div class="container data-grid">
+      <div class="data-cell"><div class="data-icon">▦</div><div><b data-count="2">0</b><span>已开设期次</span></div></div>
+      <div class="data-cell"><div class="data-icon">♧</div><div><b data-count="90">0</b><span>已服务学生人次</span></div></div>
+      <div class="data-cell"><div class="data-icon">◷</div><div><b data-count="96">0</b><span>实验总学时</span></div></div>
+      <div class="data-cell"><div class="data-icon">⇄</div><div><b data-count="22">0</b><span>交互操作步骤</span></div></div>
+      <div class="data-cell"><div class="data-icon">✦</div><div><b data-count="5">0</b><span>AI 专家技能模块</span></div></div>
+      <div class="data-cell"><div class="data-icon">⌘</div><div><b data-count="7">0</b><span>核心知识点</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============ 智能实验室（模仿 ilab-x 板块） ============ -->
+  <section class="section" id="smartlab">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">智能实验室 · 在线实验教学课程工具</span>
+        <h2 class="sec-title">三种课程形态，适配不同教学场景</h2>
+        <p class="sec-lead">项目依托实验空间平台与超星学习通，支持虚拟仿真实验课、线上实验课与线上线下混合式实验课，实现实验资源共享、过程数据采集与综合评价。</p>
+      </div>
+      <div class="smart-grid">
+        <article class="smart-card">
+          <div class="smart-icon si1">🖥</div><h3>虚拟仿真实验课</h3>
+          <p>支持虚拟仿真实验教学课程与"实验空间"的接口对接，实现共享应用数据的采集与留存，以及综合应用评价数据的采集与分析。</p>
+          <a href="#lab" class="smart-link">进入实验 →</a>
+        </article>
+        <article class="smart-card">
+          <div class="smart-icon si2">📚</div><h3>线上实验课</h3>
+          <p>便捷构建线上课程，集成虚拟仿真实验教学资源，实现理论教学与实验教学的高度融合，支持在线实验教学全过程实施。</p>
+          <a href="#resources" class="smart-link">查看资源 →</a>
+        </article>
+        <article class="smart-card">
+          <div class="smart-icon si3">🔀</div><h3>线上线下混合式实验课</h3>
+          <p>支持基于 MOOC/SPOC 的混合式课程建设，实现备课、班级、成绩、活动管理闭环，打通在线学习与线下实拍验证。</p>
+          <a href="#flow" class="smart-link">查看流程 →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 项目概览 ============ -->
+  <section class="section section-alt" id="overview">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">01 / 项目概览</span>
+        <h2 class="sec-title">破解"拍不起、试错贵、不可逆"的实训难题</h2>
+        <p class="sec-lead">广告创意与策划、摄影摄像是视觉传达设计专业的核心课程，校内已建有摄影摄像实训室（影室灯与闪光灯、微单相机与镜头组、柔光箱与色片、绿幕影棚、静物拍摄台等），具备基础实拍条件；但真实商业级广告制作成本高、周期长——高端器材与场景租赁、模特与搭景费用动辄数万元，汽车棚拍、珠宝微距、液体高速摄影等商业场景远超实训条件，布光方案反复试错消耗大量课时与耗材，且商业投放一经发布不可撤回，学生无法在真实环境中试错。本实验以虚拟仿真方式还原品牌广告从项目解读、策略定位、创意生成、影棚布光预演、多终端适配到投放回收与效能诊断的完整流程：高成本、不可逆环节在虚拟环境中反复训练，布光方案经仿真验证后回流实训室实拍，虚实结合完成过去无法在课堂完成的实战训练。</p>
+      </div>
+      <div class="ov-grid">
+        <article class="ov-card"><div class="ov-ic">💰</div><h3>高成本 · 高消耗</h3><p>汽车棚拍、珠宝微距、液体高速摄影远超实训条件，布光试错消耗大量课时与耗材。虚拟环境让高成本环节反复训练。</p></article>
+        <article class="ov-card"><div class="ov-ic">⛔</div><h3>不可逆操作</h3><p>商业投放一经发布不可撤回。仿真投放引擎让学生在零风险环境中验证假设、观察数据波动、反复迭代优化。</p></article>
+        <article class="ov-card"><div class="ov-ic">🧩</div><h3>大型综合训练</h3><p>将六阶段全链路压缩进课堂，训练过去无法在课堂完成的实战能力，形成"做中学、评中改"的教学闭环。</p></article>
+      </div>
+      <div class="concept-band"><span class="cb-tag">虚实结合</span><p>布光方案经 <b>虚拟仿真验证</b> 后输出标准布光图与曝光参数单，<b>回流摄影摄像实训室实拍</b>，实训设备利用率与一次拍摄成功率同步提升。</p></div>
+    </div>
+  </section>
+
+  <!-- ============ 教学目标 + 原理 ============ -->
+  <section class="section" id="objectives">
+    <div class="container">
+      <div class="sec-head"><span class="eyebrow">02 / 教学目标与原理</span><h2 class="sec-title">知识 · 能力 · 素养 三位一体</h2></div>
+      <div class="obj-grid">
+        <article class="obj-card"><div class="obj-ic">📖</div><h3>知识目标</h3><ul><li>掌握广告创意策划流程与定位诉求策略</li><li>掌握商业摄影布光基础：光位、光比、色温与材质质感</li><li>理解多终端呈现规律与传播效能指标体系</li><li>了解 AIGC 素材著作权与广告合规要求</li></ul></article>
+        <article class="obj-card"><div class="obj-ic">🎯</div><h3>能力目标<span class="obj-sub">三级递进</span></h3>
+          <div class="levels">
+            <div class="lv"><span class="lvt l1">基础层</span><p>独立完成项目解读、受众画像与单终端版式设计</p></div>
+            <div class="lv"><span class="lvt l2">综合层</span><p>运用 AIGC 协同生成方案、多终端适配、依据数据迭代优化</p></div>
+            <div class="lv"><span class="lvt l3">研究探索层</span><p>提出假设、设计对照实验、形成策略性结论并创新表达</p></div>
+          </div>
+        </article>
+        <article class="obj-card"><div class="obj-ic">⚖️</div><h3>素养目标</h3><ul><li>树立真实诚信的传播伦理与广告法规意识</li><li>形成数据安全与算法公平意识</li><li>具备团队协作与方案陈述能力</li><li>培养对智能生成结果的判断与取舍能力</li></ul></article>
+      </div>
+      <div class="principle-box">
+        <h3>实验原理：信息编码 → 渠道分发 → 受众解码 → 效果反馈</h3>
+        <div class="cycle">
+          <div class="cy"><b>1</b><span>信息编码</span><small>竞品分析 · 定位诉求 · 视觉层级</small></div><i>→</i>
+          <div class="cy"><b>2</b><span>渠道分发</span><small>多终端呈现 · 媒介组合</small></div><i>→</i>
+          <div class="cy"><b>3</b><span>受众解码</span><small>受众画像 · 行为数据</small></div><i>→</i>
+          <div class="cy"><b>4</b><span>效果反馈</span><small>效能指标 · 诊断迭代</small></div>
+        </div>
+        <div class="kp-line"><b>七大知识点：</b>创意策划流程 · 受众画像与行为数据 · AIGC人机协同 · 商业摄影布光 · 多终端交互 · 效能指标体系 · 内容合规与伦理</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 实验中心：六阶段 + 22步 ============ -->
+  <section class="section section-alt" id="center">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">03 / 实验中心</span>
+        <h2 class="sec-title">六阶段实验流程 · 22 步交互操作</h2>
+        <p class="sec-lead">按"课前预习—课中仿真—课后迭代"三阶段组织，共 8 学时。任务驱动与数据驱动相结合，virtual 仿真与实训室实拍衔接。</p>
+      </div>
+      <div class="phase-grid">
+        <article class="phase"><span class="ph-i">01</span><span class="ph-t">步骤 1—4</span><h3>策略定位</h3><p>项目解读、竞品分析、受众画像、定位与诉求策略</p></article>
+        <article class="phase"><span class="ph-i">02</span><span class="ph-t">步骤 5—8</span><h3>创意生成</h3><p>创意比选、脚本分镜、AIGC 草图生成、合规审查</p></article>
+        <article class="phase ph-hl"><span class="ph-i">03</span><span class="ph-t">步骤 9—13</span><h3>布光拍摄</h3><p>器材选型、布光设计、虚拟试拍、参数单输出与实拍验证</p><span class="ph-badge">核心实验</span></article>
+        <article class="phase"><span class="ph-i">04</span><span class="ph-t">步骤 14—16</span><h3>多终端适配</h3><p>信息流版式、互动 H5、户外数字屏适配</p></article>
+        <article class="phase"><span class="ph-i">05</span><span class="ph-t">步骤 17—19</span><h3>仿真投放</h3><p>预算排期、仿真投放、效能数据采集与基准对照</p></article>
+        <article class="phase"><span class="ph-i">06</span><span class="ph-t">步骤 20—22</span><h3>诊断评价</h3><p>效能诊断、方案迭代、实验报告与能力画像</p></article>
+      </div>
+      <div class="steps-head"><h3>22 步交互性操作 · 逐步赋分</h3><div class="steps-tabs" role="tablist" aria-label="实验阶段筛选">
+        <button class="stab active" role="tab" aria-selected="true" data-filter="all">全部</button>
+        <button class="stab" role="tab" aria-selected="false" data-filter="1">策略</button>
+        <button class="stab" role="tab" aria-selected="false" data-filter="2">创意</button>
+        <button class="stab" role="tab" aria-selected="false" data-filter="3">布光拍摄</button>
+        <button class="stab" role="tab" aria-selected="false" data-filter="4">多终端</button>
+        <button class="stab" role="tab" aria-selected="false" data-filter="5">投放</button>
+        <button class="stab" role="tab" aria-selected="false" data-filter="6">评价</button>
+      </div></div>
+      <div class="steps-grid" id="stepsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ 核心：虚拟影棚实验室 ============ -->
+  <section class="section lab-section" id="lab">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">04 / 核心实验 · 虚拟仿真实验室</span>
+        <h2 class="sec-title">虚拟影棚实验室 <span class="live-tag"><span></span>可实操</span></h2>
+        <p class="sec-lead">1:1 复刻校内摄影摄像实训室。拖拽布景物体与灯光、切换移动/旋转/缩放、上传自有 3D 模型与图片替换布景，实时观察物理光照渲染——把布光试错与场景搭建完整搬进浏览器。</p>
+        <div class="phase3-brief">
+          <div class="p3-head"><span class="p3-tag">第三阶段 · 本实验最具特色</span><b>虚拟影棚 · 从布光试错到实训室实拍</b></div>
+          <p>影棚内 1:1 还原我校摄影摄像实训室的设备和空间：<strong>影室灯、柔光箱、各色滤光片、标准灰卡</strong>一应俱全。你可以自由搭配灯位、调整光比与色温，系统实时渲染布光效果，并给出<strong>布光助手</strong>的建议；棚拍、微距这些平时拍不起、也拍不好的商业场景，在这里都可以反复试错。确定方案后，系统输出<strong>标准布光图与参数单</strong>——请把它打印或抄录下来，下一课时，我们要在真实实训室里按这张参数单完成拍摄。</p>
+          <div class="p3-flow"><span>① 还原设备</span><i>→</i><span>② 布光试错</span><i>→</i><span>③ 布光助手建议</span><i>→</i><span>④ 输出布光图与参数单</span><i>→</i><span>⑤ 实训室实拍</span></div>
+        </div>
+      </div>
+      <div class="lab-shell">
+        <div class="lab-viewport">
+          <div class="lab-toolbar">
+            <div class="toolbar-group"><span class="toolbar-label">视角</span><button class="tool-btn active" data-view="perspective">透视</button><button class="tool-btn" data-view="front">正面</button><button class="tool-btn" data-view="top">俯视</button><button class="tool-btn" id="resetView">⟲ 重置场景</button></div>
+            <div class="toolbar-group"><span class="toolbar-label">添加布景</span><button class="tool-btn" data-shape="box">▦ 方块</button><button class="tool-btn" data-shape="sphere">● 球体</button><button class="tool-btn" data-shape="cylinder">▮ 圆柱</button><button class="tool-btn" data-shape="cone">▲ 圆锥</button><button class="tool-btn" data-shape="torus">◎ 圆环</button><button class="tool-btn" data-shape="plane">▭ 展板</button></div>
+            <div class="toolbar-group"><span class="toolbar-label">上传替换</span><button class="tool-btn up hot" id="photo3dBtn">🪄 照片转3D</button><button class="tool-btn up" id="uploadModelBtn">🧊 3D模型</button><button class="tool-btn up" id="uploadTexBtn">🖼 物体贴图</button><button class="tool-btn up" id="uploadPosterBtn">📰 广告画面</button><button class="tool-btn up" id="uploadBgBtnTop">🌄 场景背景</button></div>
+            <div class="toolbar-group"><span class="toolbar-label">编辑物体</span><button class="tool-btn active" data-mode="translate">✥ 移动</button><button class="tool-btn" data-mode="rotate">⟳ 旋转</button><button class="tool-btn" data-mode="scale">⤢ 缩放</button><button class="tool-btn" id="undoBtn">↶ 撤销</button><button class="tool-btn" id="snapshotBtn">📷 截图</button></div>
+            <div class="toolbar-group"><span class="toolbar-label">方案输出</span><button class="tool-btn up" id="diagramBtn">🗺 标准布光图</button><button class="tool-btn up" id="exportTopBtn">📋 参数单</button></div>
+          </div>
+          <div class="canvas-wrap" id="canvasWrap">
+            <canvas id="studioCanvas" aria-label="3D虚拟影棚场景：可拖拽移动、旋转、缩放布景物体与灯光"></canvas>
+            <div class="canvas-hint" id="canvasHint">拖拽物体/灯光 · 切换上方模式可旋转缩放 · 空白处拖动旋转视角 · 滚轮缩放</div>
+            <div class="canvas-loading" id="canvasLoading"><div class="spinner"></div><span>正在加载 3D 影棚…</span></div>
+          </div>
+          <div class="viewport-footer"><span class="vp-status"><span class="vp-dot"></span> WebGL 物理光照渲染 · 60 FPS 目标</span><span class="vp-tip" id="vpTip">提示：点击选中灯具后，用右侧滑块精细调节</span></div>
+        </div>
+        <aside class="lab-panel" aria-label="布光控制面板">
+          <div class="panel-head"><h3>布光控制台</h3><span>Lighting Console</span></div>
+          <div class="panel-block scene-block">
+            <div class="block-title">① 场景背景与布置 <small>可上传 / 换色 / 清除</small></div>
+            <div class="sub-label">背景类型</div>
+            <div class="bg-type-row">
+              <button class="tool-btn active" data-bg="color">纯色</button>
+              <button class="tool-btn" data-bg="gradient">渐变</button>
+              <button class="tool-btn" data-bg="image">图片</button>
+            </div>
+            <div class="bg-color-row">
+              <label>背景色 A <input type="color" id="bgColorA" value="#080d18" aria-label="背景色A"></label>
+              <label>背景色 B <input type="color" id="bgColorB" value="#1a2a4a" aria-label="背景色B"></label>
+            </div>
+            <div class="scene-actions">
+              <button class="tool-btn" id="uploadBgBtn">🌄 上传背景图</button>
+              <button class="tool-btn" id="clearBgBtn">✕ 清除背景</button>
+            </div>
+            <div class="sub-label">场景布置方式</div>
+            <div class="arrange-grid">
+              <button class="tool-btn" data-arrange="center">居中特写</button>
+              <button class="tool-btn" data-arrange="triangle">三角构图</button>
+              <button class="tool-btn" data-arrange="symmetry">对称陈列</button>
+              <button class="tool-btn" data-arrange="scatter">散点布置</button>
+            </div>
+            <div class="scene-actions">
+              <button class="tool-btn" id="toggleGridBtn">⊞ 网格：开</button>
+              <button class="tool-btn danger" id="clearObjectsBtn">🗑 清空布景</button>
+              <button class="tool-btn" id="restoreSceneBtn">↺ 恢复默认</button>
+            </div>
+          </div>
+          <div class="panel-block object-block" id="objectBlock">
+            <div class="block-title">② 布景物体编辑 <small id="objSelName">未选中</small></div>
+            <div class="obj-list" id="objList" aria-label="布景物体列表"></div>
+            <div class="obj-props">
+              <div class="prop-row"><label for="objName">物体名称</label><input type="text" id="objName" maxlength="24"></div>
+              <div class="prop-row"><label>位置坐标 <small>X / Y / Z</small></label><div class="xyz-inputs"><input type="number" id="posX" step="0.1" aria-label="X 坐标"><input type="number" id="posY" step="0.1" aria-label="Y 坐标"><input type="number" id="posZ" step="0.1" aria-label="Z 坐标"></div></div>
+              <div class="prop-row"><label for="rotY">水平旋转 <small>度</small></label><input type="number" id="rotY" step="5" aria-label="旋转角度"></div>
+              <div class="prop-row"><label for="scaleVal">缩放比例 <small>0.15 — 5</small></label><input type="number" id="scaleVal" step="0.1" min="0.15" max="5" aria-label="缩放比例"></div>
+              <div class="prop-row"><label for="objColor">物体颜色</label><input type="color" id="objColor" aria-label="物体颜色"></div>
+              <div class="obj-actions"><button class="tool-btn" id="duplicateObjBtn">⧉ 复制</button><button class="tool-btn" id="hideObjBtn">◐ 显示/隐藏</button><button class="tool-btn danger" id="deleteObjBtn">🗑 删除</button></div>
+            </div>
+            <p class="obj-help">在画布中点击选中物体，用上方「移动 / 旋转 / 缩放」切换编辑方式；也可直接输入数值精确调整。所有物体（含拍摄主体）均可删除或通过「添加布景 / 上传替换」重新补充。</p>
+          </div>
+          <div class="panel-block">
+            <div class="block-title">③ 商业拍摄场景 <small>棚拍 / 微距 · 一键反复试错</small></div>
+            <div class="scene-preset-grid">
+              <button class="scene-preset active" data-scene="product">🏷 商品棚拍</button>
+              <button class="scene-preset" data-scene="macro">💎 珠宝微距</button>
+              <button class="scene-preset" data-scene="portrait">👤 人像棚拍</button>
+              <button class="scene-preset" data-scene="liquid">💧 动感液体</button>
+            </div>
+            <p class="block-help">一键布置灯位、光比、色温、背景与主体材质，可继续微调反复试拍，对比不同方案。</p>
+          </div>
+          <div class="panel-block equip-block">
+            <div class="block-title">④ 实训室器材库 <small>1:1 还原 · 点击添加到影棚</small></div>
+            <div class="equip-grid">
+              <button class="equip-btn" data-equip="strobe">💡 影室灯</button>
+              <button class="equip-btn" data-equip="softbox">▣ 柔光箱</button>
+              <button class="equip-btn" data-equip="reflector">◍ 反光板</button>
+              <button class="equip-btn" data-equip="graycard">▤ 标准灰卡</button>
+              <button class="equip-btn" data-equip="gel-red">🟥 红滤光片</button>
+              <button class="equip-btn" data-equip="gel-blue">🟦 蓝滤光片</button>
+              <button class="equip-btn" data-equip="gel-yellow">🟨 黄滤光片</button>
+              <button class="equip-btn" data-equip="gel-green">🟩 绿滤光片</button>
+            </div>
+            <p class="block-help">器材可像布景一样选中、移动、旋转、缩放、改名与删除；滤光片也可在物体编辑中改色。</p>
+          </div>
+          <div class="panel-block">
+            <div class="block-title">⑤ 布光预设 <small>经典灯位组合</small></div>
+            <div class="preset-grid"><button class="preset active" data-preset="flat">大平光</button><button class="preset" data-preset="rembrandt">伦勃朗光</button><button class="preset" data-preset="rim">侧逆光</button><button class="preset" data-preset="butterfly">蝴蝶光</button></div>
+          </div>
+          <div class="panel-block">
+            <div class="block-title">⑥ 灯光调整 <small>点击灯具或卡片选中</small></div>
+            <div class="light-list" id="lightList">
+              <div class="light-item active" data-light="key"><span class="lc" style="background:#f59e0b"></span><div class="li"><b>主光 Key</b><small>塑造主体与阴影</small></div><label class="switch"><input type="checkbox" checked data-toggle="key"><span></span></label></div>
+              <div class="light-item" data-light="fill"><span class="lc" style="background:#38bdf8"></span><div class="li"><b>补光 Fill</b><small>柔化阴影</small></div><label class="switch"><input type="checkbox" checked data-toggle="fill"><span></span></label></div>
+              <div class="light-item" data-light="rim"><span class="lc" style="background:#a855f7"></span><div class="li"><b>轮廓光 Rim</b><small>勾勒材质边缘</small></div><label class="switch"><input type="checkbox" checked data-toggle="rim"><span></span></label></div>
+            </div>
+            <div class="slider-group"><label for="intensity">光强 <output id="intensityVal">80%</output></label><input type="range" id="intensity" min="0" max="200" value="80"></div>
+            <div class="slider-group"><label for="temp">色温 <output id="tempVal">5600K</output></label><input type="range" id="temp" min="2000" max="9000" step="100" value="5600"></div>
+            <div class="slider-group"><label for="ratio">光比（主:补） <output id="ratioVal">1.4 : 1</output></label><input type="range" id="ratio" min="10" max="80" step="1" value="14"></div>
+          </div>
+          <div class="panel-block">
+            <div class="block-title">⑦ 拍摄对象 / 材质 <small>作用于选中物体</small></div>
+            <div class="material-grid"><button class="material active" data-material="metal">🔶 金属</button><button class="material" data-material="glass">🔷 玻璃</button><button class="material" data-material="fabric">🧣 织物</button><button class="material" data-material="skin">👤 皮肤</button></div>
+          </div>
+          <div class="panel-block ai-block">
+            <div class="block-title">⑧ 布光助手建议 <span class="ai-mini">实时参谋</span></div>
+            <div class="ai-advice" id="aiAdvice">调整灯光或切换预设后，这里会给出专家建议与质询追问。</div>
+            <div class="score-row"><span>方案评分</span><div class="score-bar"><div class="score-fill" id="scoreFill"></div></div><b id="scoreVal">--</b></div>
+          </div>
+          <button class="btn-export" id="exportBtn">⬇ 输出标准布光图与参数单</button>
+        </aside>
+      </div>
+
+      <!-- 上传用的隐藏文件输入 -->
+      <input type="file" id="modelFile" accept=".glb,.gltf" hidden>
+      <input type="file" id="texFile" accept="image/*" hidden>
+      <input type="file" id="posterFile" accept="image/*" hidden>
+      <input type="file" id="bgFile" accept="image/*" hidden>
+      <input type="file" id="photo3dFile" accept="image/*" hidden>
+
+      <!-- 照片转 3D 弹窗 -->
+      <div class="modal" id="photo3dModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="photo3dTitle">
+        <div class="modal-backdrop" data-p3close></div>
+        <div class="modal-box photo3d-box">
+          <div class="modal-head"><h3 id="photo3dTitle">🪄 照片一键转 3D</h3><button class="modal-close" data-p3close aria-label="关闭">×</button></div>
+          <div class="modal-body">
+            <p class="p3-intro">上传产品照片（如 AD 钙奶、包装盒、商品正面图），在浏览器本地转换为可 360° 旋转的 3D 物体。<b>照片不会上传到服务器</b>，生成后可像其它布景一样移动、旋转、改材质、打光。</p>
+            <div class="p3-upload" id="p3Drop" role="button" tabindex="0" aria-label="点击或拖拽上传产品照片">
+              <div class="p3-drop-inner" id="p3DropInner"><span>📷</span><b>点击选择照片 / 拖拽到此处</b><small>JPG · PNG · WebP · 建议主体清晰、背景简单</small></div>
+              <canvas id="p3Preview" hidden></canvas>
+            </div>
+            <div class="p3-label">转换模式</div>
+            <div class="p3-modes" id="p3Modes">
+              <button class="p3-mode active" data-p3mode="relief"><span>🏔</span><b>照片浮雕</b><small>亮度转深度，正面贴原图，斜看有起伏</small></button>
+              <button class="p3-mode" data-p3mode="cutout"><span>🎯</span><b>抠图立体</b><small>去背景挤出，适合纯色底产品图</small></button>
+              <button class="p3-mode" data-p3mode="cylinder"><span>🧴</span><b>瓶身环绕</b><small>照片缠圆柱，适合饮料瓶/易拉罐</small></button>
+              <button class="p3-mode" data-p3mode="card"><span>🃏</span><b>立体卡片</b><small>带厚度展牌，最快生成</small></button>
+            </div>
+            <div class="p3-controls">
+              <label>立体强度 <input type="range" id="p3Depth" min="10" max="120" value="55"><output id="p3DepthVal">0.55</output></label>
+              <label id="p3ThreshRow" style="display:none">抠图灵敏度 <input type="range" id="p3Thresh" min="20" max="110" value="62"><output id="p3ThreshVal">62</output></label>
+              <label>侧面颜色 <input type="color" id="p3Side" value="#d9dde3"></label>
+            </div>
+            <div class="p3-tip" id="p3Tip">选择照片后，点「加入影棚」生成 3D 物体。</div>
+          </div>
+          <div class="modal-foot no-print"><button class="btn btn-plain btn-sm" data-p3close>取消</button><button class="btn btn-primary btn-sm" id="p3AddBtn" disabled>✨ 加入影棚</button></div>
+        </div>
+      </div>
+
+      <div class="modal" id="reportModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="reportTitle">
+        <div class="modal-backdrop no-print" data-close></div>
+        <div class="modal-box report-box">
+          <div class="modal-head"><h3 id="reportTitle">标准布光图 / 布光参数单（可打印 · 可抄录）</h3><button class="modal-close no-print" data-close aria-label="关闭">×</button></div>
+          <div class="modal-body" id="reportBody"></div>
+          <div class="modal-foot no-print">
+            <button class="btn btn-plain btn-sm" data-close>关闭</button>
+            <button class="btn btn-plain btn-sm" id="copyReport">📄 抄录文本</button>
+            <button class="btn btn-primary btn-sm" id="printReport">🖨 打印参数单</button>
+            <button class="btn btn-primary btn-sm" id="downloadReport">下载 TXT</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AIGC 商业海报工坊 ============ -->
+  <section class="section poster-section" id="poster">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">05 / AIGC 商业海报工坊 · 上传产品图智能生成</span>
+        <h2 class="sec-title">上传产品图 + 一句话，生成商业海报 <span class="live-tag"><span></span>AI 生成</span></h2>
+        <p class="sec-lead">呼应"创意生成"阶段（步骤 7）。上传产品图片、写下完整指令，系统不套用固定模板，而是把你的指令解析成"布局基因"——骨架结构、留白、对齐、图片形状、分割角度、装饰密度都随指令实时计算生成，同一指令点「换一版」还能长出全新排版。每一次生成都是独一无二的原创版式，可下载用于多终端投放验证。</p>
+      </div>
+
+      <div class="poster-shell">
+        <!-- 左侧：控制面板 -->
+        <div class="poster-controls">
+          <div class="pc-block">
+            <div class="pc-title">① 上传产品图片</div>
+            <input type="file" id="productImage" accept="image/*" hidden>
+            <div class="drop-zone" id="dropZone">
+              <div class="drop-icon">📷</div>
+              <div class="drop-text" id="productPlaceholder">点击或拖拽上传产品图</div>
+              <div class="drop-sub">支持 JPG / PNG / WEBP，图片仅在本地处理</div>
+              <img id="productThumb" alt="产品图预览" style="display:none">
+            </div>
+            <div class="file-name" id="productFileName">未选择文件</div>
+            <label class="smart-toggle"><input type="checkbox" id="smartColorToggle" checked> 🎨 智能取色 · 自动匹配产品主色</label>
+            <div class="palette-preview" id="palettePreview"><span></span><span></span><span></span><span></span><em>上传图片后自动生成专属配色</em></div>
+          </div>
+
+          <div class="pc-block">
+            <div class="pc-title">② 输入提示词 <small>AIGC 智能解析</small></div>
+            <textarea id="posterPrompt" rows="8" spellcheck="false" placeholder="尽情描述你的完整创意，不限字数。例如：&#10;日系清新美食海报，杂志封面排版，柔和自然光，抹茶绿主色调&#10;标题「一口清新」，副标题：自然之味 纯净每一刻&#10;品牌：VERDANT，价格：¥38，按钮：即刻品尝，加产品实拍图">科技感蓝色发布会海报，左右分栏，标题「重新定义」，副标题：AIGC 赋能智能创作新体验，品牌：NEXA，价格：¥299，按钮：立即探索，加产品实拍图</textarea>
+            <div class="prompt-meta"><span id="promptCount">已输入 0 字 · 不限字数</span><span class="prompt-tip">支持换行，可粘贴完整指令</span></div>
+            <div class="prompt-chips">
+              <button class="prompt-chip" data-prompt="日系清新美食海报，杂志封面，标题「一口清新」，副标题：自然之味 纯净每一刻，品牌：VERDANT，价格：38，按钮：即刻品尝">🍰 美食杂志</button>
+              <button class="prompt-chip" data-prompt="活力橙促销大字报，撞色冲击，标题「限时狂欢」，副标题：全场低至五折，品牌：VOLT，价格：99，按钮：马上抢购">🔥 促销大字报</button>
+              <button class="prompt-chip" data-prompt="中式婚礼请柬，手写书法，居中对称，标题「喜结良缘」，副标题：谨定良辰 敬邀共鉴，品牌：囍，日期：2026.05.20，按钮：敬请光临">💒 婚礼请柬</button>
+              <button class="prompt-chip" data-prompt="科技感蓝色发布会，左右分栏，标题「重新定义」，副标题：AIGC 赋能智能创作，品牌：NEXA，日期：2026.09.18，按钮：立即探索">🚀 科技发布</button>
+              <button class="prompt-chip" data-prompt="水墨极简艺术展海报，留白，标题「墨韵」，副标题：东方美学的当代回响，品牌：ART MUSEUM，日期：2026.10.01，按钮：预约观展">🖌 水墨展览</button>
+              <button class="prompt-chip" data-prompt="票券风格音乐节海报，标题「星河共振」，副标题：当音符遇见璀璨星海，品牌：LUMINA FEST，日期：2026.08.15，按钮：立即购票">🎫 音乐票券</button>
+            </div>
+            <div class="gen-row"><button class="btn-gen" id="genPosterBtn">✨ 自由生成海报</button><button class="btn-gen btn-alt" id="regenPosterBtn" title="同一指令换一种全新排版">🔄 换一版</button><button class="btn-gen btn-alt" id="inspireBtn" title="随机组合风格与文案">🎲 灵感</button></div>
+          </div>
+
+          <div class="pc-block">
+            <div class="pc-title">③ 风格主题</div>
+            <div class="theme-grid">
+              <button class="theme-card active" data-theme="tech"><span class="tc-dot" style="background:linear-gradient(135deg,#22d3ee,#1e4a9c)"></span>科技未来</button>
+              <button class="theme-card" data-theme="luxury"><span class="tc-dot" style="background:linear-gradient(135deg,#d4af37,#332815)"></span>奢华黑金</button>
+              <button class="theme-card" data-theme="fresh"><span class="tc-dot" style="background:linear-gradient(135deg,#4caf78,#a8dfb4)"></span>清新自然</button>
+              <button class="theme-card" data-theme="energy"><span class="tc-dot" style="background:linear-gradient(135deg,#ffb347,#d63b12)"></span>活力橙</button>
+              <button class="theme-card" data-theme="minimal"><span class="tc-dot" style="background:linear-gradient(135deg,#fafafa,#8a8a8a)"></span>简约高级</button>
+              <button class="theme-card" data-theme="dream"><span class="tc-dot" style="background:linear-gradient(135deg,#e879f9,#5b4bc4)"></span>梦幻紫</button>
+            </div>
+          </div>
+
+          <div class="pc-block">
+            <div class="pc-title">④ 画布比例 <small>版式由指令自由生成</small></div>
+            <div class="layout-row">
+              <button class="layout-btn active" data-layout="portrait">▯ 竖版海报</button>
+              <button class="layout-btn" data-layout="square">▢ 方形主图</button>
+              <button class="layout-btn" data-layout="landscape">▭ 横版横幅</button>
+            </div>
+            <div class="size-label">输出尺寸 <b id="posterSizeLabel">1080 × 1440</b></div>
+          </div>
+
+          <div class="pc-block">
+            <div class="pc-title">⑤ 文案与装饰</div>
+            <div class="pc-fields">
+              <label>品牌 <input type="text" id="posterBrand" value="AURA STUDIO"></label>
+              <label>主标题 <input type="text" id="posterTitle" value=" redefine&#10;你的视界"></label>
+              <label>副标题 <input type="text" id="posterSubtitle" value="AIGC 赋能 · 智能创作新体验"></label>
+              <label>按钮文案 <input type="text" id="posterCta" value="立即探索"></label>
+              <label>价格 <input type="text" id="posterPrice" value="38" placeholder="如 38 或 299"></label>
+              <label>角标 <input type="text" id="posterTag" value="FRESH SELECTION · 2026"></label>
+            </div>
+            <div class="decor-row">
+              <label><input type="checkbox" class="decor-toggle" data-decor="glow" checked> 光晕</label>
+              <label><input type="checkbox" class="decor-toggle" data-decor="grid" checked> 纹理</label>
+              <label><input type="checkbox" class="decor-toggle" data-decor="card" checked> 产品卡片</label>
+              <label><input type="checkbox" class="decor-toggle" data-decor="badge" checked> 角标</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧：预览 -->
+        <div class="poster-preview-wrap">
+          <div class="preview-head"><span>🖼 实时预览</span><button class="btn-download" id="downloadPosterBtn">⬇ 下载高清海报 PNG</button></div>
+          <div class="recognized-box" id="recognizedBox"><span class="rec-label">AI 已识别</span><span class="rec-tag">场景 · 通用设计</span><span class="rec-tag">配色 · 清新自然</span><span class="rec-tag">构图 · 经典招贴</span><span class="rec-tag">字体 · 衬线宋体</span></div>
+          <div class="preview-stage"><canvas id="posterCanvas" aria-label="商业海报实时预览"></canvas></div>
+          <div class="preview-foot">提示词由浏览器本地解析，图片不会上传到服务器 · 生成的海报可用于多终端投放适配实验</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AI 智能体 ============ -->
+  <section class="section" id="ai">
+    <div class="container">
+      <div class="sec-head"><span class="eyebrow">05 / AIGC 智能体</span><h2 class="sec-title">"创策AI·广告总顾问" 五类专家技能</h2><p class="sec-lead">按步骤号自动激活对应模块，输出建议后强制追加角色化质询追问，形成"学生先产出—智能体质询—学生修改—教师评价"的人机协同闭环。</p></div>
+      <div class="ai-grid">
+        <article class="ai-card"><div class="ai-ic c1">🧭</div><h3>策略罗盘</h3><p>解析项目，生成定位与诉求建议，输出多套创意方向并说明依据。</p><span>步骤 1—4</span></article>
+        <article class="ai-card"><div class="ai-ic c2">🔍</div><h3>人群透镜</h3><p>解读人群数据，生成画像与触达策略，提示定向风险。</p><span>步骤 3、19</span></article>
+        <article class="ai-card"><div class="ai-ic c3">💡</div><h3>布光参谋</h3><p>依据材质与诉求推荐灯位组合，预警高光溢出与色温偏差。</p><span>步骤 9—13</span></article>
+        <article class="ai-card"><div class="ai-ic c4">📊</div><h3>效能诊断师</h3><p>比对行业基准，定位问题要素，给出改进路径与质询追问。</p><span>步骤 17—21</span></article>
+        <article class="ai-card"><div class="ai-ic c5">🛡</div><h3>合规哨兵</h3><p>识别广告法禁用用语与著作权、肖像风险，给出修改建议。</p><span>步骤 8</span></article>
+      </div>
+      <div class="ai-loop"><span>学生独立产出</span><i>→</i><span>智能体建议 + 质询</span><i>→</i><span>学生回应与修改</span><i>→</i><span>教师评价</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 多终端 + 效能指标 ============ -->
+  <section class="section section-alt" id="terminals">
+    <div class="container">
+      <div class="sec-head"><span class="eyebrow">06 / 多终端适配与效能评价</span><h2 class="sec-title">同一方案，四类终端差异化呈现</h2></div>
+      <div class="term-grid">
+        <article class="term-card"><div class="tm mock-feed"><div class="ad-img"></div><div class="ad-l"></div><div class="ad-l short"></div><div class="ad-cta">立即了解</div></div><h3>手机信息流</h3><p>单手滑动、3 秒内信息可读</p></article>
+        <article class="term-card"><div class="tm mock-h5"><div class="h5c">互动</div><span>点击探索 · 游戏化参与</span></div><h3>互动 H5</h3><p>不少于 3 个交互节点</p></article>
+        <article class="term-card"><div class="tm mock-screen"><b>品牌主张</b><small>远距离瞬时读取</small></div><h3>户外数字屏</h3><p>按视距调整字号与信息量</p></article>
+        <article class="term-card"><div class="tm mock-ar"><div class="ar-t">◈</div><span>AR 虚实融合</span></div><h3>移动 WebAR</h3><p>摄像头虚实融合互动</p></article>
+      </div>
+      <div class="metric-grid">
+        <div class="metric"><span>👁</span><b>曝光量</b><small>触达规模与频次控制</small></div>
+        <div class="metric"><span>🖱</span><b>点击率 CTR</b><small>创意吸引与指向性</small></div>
+        <div class="metric"><span>⏱</span><b>停留时长</b><small>信息可读与参与度</small></div>
+        <div class="metric"><span>🎯</span><b>转化率 CVR</b><small>行动号召有效性</small></div>
+        <div class="metric"><span>🧠</span><b>品牌记忆度</b><small>信息回忆与品牌印象</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 实验结果与结论 ============ -->
+  <section class="section" id="results">
+    <div class="container">
+      <div class="sec-head"><span class="eyebrow">07 / 实验结果与结论</span><h2 class="sec-title">不同实验条件下的可验证结论</h2><p class="sec-lead">学生通过控制单一变量、重复投放验证，形成"假设—干预—验证"的实证闭环。</p></div>
+      <div class="result-grid">
+        <article class="result"><b>01 布光条件</b><p>大平光质感平淡；侧逆光配合柔光箱显著提升金属与玻璃质感；色温偏差拉低评分。得到"光位、光比、色温对材质质感的定量影响"结论。</p></article>
+        <article class="result"><b>02 创意要素</b><p>提高主视觉与背景对比度、强化 CTA 指向性可提升点击率；版面元素超过 5 个时信息过载，停留时长与回忆率下降。</p></article>
+        <article class="result"><b>03 终端策略</b><p>单一终端短期曝光最高但覆盖不足；多终端组合的转化率与品牌记忆度更优，单位成本相应上升。</p></article>
+        <article class="result"><b>04 受众条件</b><p>定向过窄导致触达不足且频次过早饱和；定向过宽则点击率下降。得到"精准度与规模的权衡"结论。</p></article>
+        <article class="result"><b>05 合规条件</b><p>含禁用用语或存在侵权风险的方案在合规环节被拦截；带病投放触发品牌风险预警并扣分。</p></article>
+        <article class="result"><b>06 人机协同</b><p>全盘采纳智能建议导致方案同质化；批判性采纳并结合品牌调性调整的方案效能最优。</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 教学资源（模仿 ilab-x） ============ -->
+  <section class="section section-alt" id="resources">
+    <div class="container">
+      <div class="sec-head"><span class="eyebrow">08 / 教学资源</span><h2 class="sec-title">实验指导与在线学习资源</h2></div>
+      <div class="res-grid">
+        <div class="res-card"><span class="res-ic">📘</span><div><b>教学指导资源</b><p>教学指导书、教学视频、电子教材、课程教案、课件（演示文稿）、虚拟仿真资源</p></div></div>
+        <div class="res-card"><span class="res-ic">🧪</span><div><b>实验指导资源</b><p>实验指导书、操作视频、知识点课件库、习题库、测试卷</p></div></div>
+        <div class="res-card"><span class="res-ic">💬</span><div><b>在线支持方式</b><p>热线电话、实验系统即时通讯工具、论坛、支持与服务群</p></div></div>
+        <div class="res-card"><span class="res-ic">🌐</span><div><b>多终端访问</b><p>Windows / macOS / iOS / Android / HarmonyOS，移动端免插件</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 共享排行（模仿 ilab-x） ============ -->
+  <section class="section" id="sharing">
+    <div class="container">
+      <div class="sec-head"><span class="eyebrow">09 / 应用与共享</span><h2 class="sec-title">实验应用、共享服务与持续建设计划</h2><p class="sec-lead">实验已在本校上线并开展两期教学，计划面向高校与社会学习者持续开放共享。</p></div>
+      <div class="share-grid">
+        <div class="share-card">
+          <h3>📈 应用数据</h3>
+          <ul class="rank-list">
+            <li><b>1</b><span>本校已服务学生</span><em>90 人次</em></li>
+            <li><b>2</b><span>已开设实验期次</span><em>2 期</em></li>
+            <li><b>3</b><span>学生评教优良率</span><em>95% 以上</em></li>
+            <li><b>4</b><span>纳入教学计划专业</span><em>1 个</em></li>
+          </ul>
+        </div>
+        <div class="share-card">
+          <h3>🗓 五年持续建设服务计划</h3>
+          <div class="plan-list">
+            <div><span>2026</span><p>完成系统上线与首轮全校应用，覆盖不少于 2 个教学班</p></div>
+            <div><span>2027</span><p>扩充终端类型与行业案例库，接入不少于 3 个真实品牌案例</p></div>
+            <div><span>2028</span><p>引入多智能体协同与更精细受众行为模型，优化赋分模型</p></div>
+            <div><span>2029</span><p>建设跨校共享课程联盟，开展学分互认与联合教学试点</p></div>
+            <div><span>2030</span><p>完成资源包升级与开放共享机制完善，面向社会常态化开放</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="share-total">五年预计服务：本校学生 <b>300</b> 人 · 外校学生 <b>500</b> 人 · 社会学习者 <b>200</b> 人 · 累计 <b>1000</b> 人</div>
+    </div>
+  </section>
+
+  <!-- ============ 项目动态（模仿 ilab-x 通知公告/新闻） ============ -->
+  <section class="section section-alt" id="news">
+    <div class="container">
+      <div class="sec-head"><span class="eyebrow">10 / 项目动态</span><h2 class="sec-title">通知公告与建设进展</h2></div>
+      <div class="news-grid">
+        <div class="news-col"><h3>📢 通知公告</h3>
+          <a href="#lab" class="news-item"><span>2026-10-29</span><p>项目申报"AIGC辅助的商业广告创意与拍摄制作虚拟仿真实验"</p></a>
+          <a href="#resources" class="news-item"><span>2026-09-01</span><p>项目面向社会学习者开放，提供服务与支持</p></a>
+          <a href="#overview" class="news-item"><span>2026-03-01</span><p>实验在校内正式上线，纳入视觉传达设计专业教学计划</p></a>
+          <a href="#results" class="news-item"><span>2026-01</span><p>连续两学期试运行完成，学生评教优良率 95% 以上</p></a>
+        </div>
+        <div class="news-col"><h3>📰 建设进展</h3>
+          <a href="#ai" class="news-item"><span>进行中</span><p>建设统一"创策AI·广告总顾问"智能体，内嵌五类专家技能模块</p></a>
+          <a href="#lab" class="news-item"><span>进行中</span><p>虚拟影棚 1:1 复刻摄影摄像实训室，完善物理光照渲染</p></a>
+          <a href="#terminals" class="news-item"><span>规划中</span><p>扩充 WebAR 互动模块与多终端物料规格自动校核</p></a>
+          <a href="#sharing" class="news-item"><span>规划中</span><p>对接实验空间平台数据接口，推进跨校共享课程联盟</p></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 教学团队 ============ -->
+  <section class="section" id="team">
+    <div class="container">
+      <div class="sec-head"><span class="eyebrow">11 / 教学团队</span><h2 class="sec-title">跨学科教学与技术团队</h2><p class="sec-lead">团队近 5 年承担核心课程教学，获国家级、省级教学奖项多项，连续两学期完成本实验试运行。</p></div>
+      <div class="team-grid">
+        <div class="member"><div class="av a1">阎</div><h4>阎伟</h4><span>项目负责人 · 讲师 · 教研室主任</span><p>实验总体设计与教学实施，广告创意策划知识图谱与任务体系构建。</p></div>
+        <div class="member"><div class="av a2">张</div><h4>张金</h4><span>副院长 · 副教授</span><p>摄影摄像课程教学，虚拟影棚布光仿真模块教学，虚实衔接指导。</p></div>
+        <div class="member"><div class="av a3">李</div><h4>李淼</h4><span>教师 · 讲师</span><p>受众行为数据建模与传播效能评价指标体系构建，数据分析教学。</p></div>
+        <div class="member"><div class="av a4">刘</div><h4>刘鑫</h4><span>教师 · 讲师</span><p>AIGC 智能体与实验知识库搭建、系统运维、网络安全等保对接。</p></div>
+        <div class="member"><div class="av a5">王</div><h4>王任菲</h4><span>教师 · 讲师</span><p>提供真实项目与行业规范数据，实验任务评审与评价标准制定。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 开展实验教学的高校（模仿 ilab-x 高校墙） ============ -->
+  <section class="section section-alt" id="schools">
+    <div class="container">
+      <div class="sec-head"><span class="eyebrow">12 / 教学应用</span><h2 class="sec-title">开展实验教学与服务合作</h2><p class="sec-lead">项目以本校视觉传达设计专业为核心应用对象，逐步推进跨校共享与企业项目合作。</p></div>
+      <div class="school-wall">
+        <div class="school s-active"><span>◈</span><b>山西应用科技学院</b><small>项目推荐单位 · 本校应用</small></div>
+        <div class="school"><span>◈</span><b>视觉传达设计专业</b><small>130502 · 核心应用专业</small></div>
+        <div class="school"><span>◈</span><b>摄影摄像实训室</b><small>校内实拍验证基地</small></div>
+        <div class="school"><span>◈</span><b>合作广告传播企业</b><small>真实项目与行业数据支持</small></div>
+        <div class="school"><span>◈</span><b>超星学习通平台</b><small>智能体部署与教学支撑</small></div>
+        <div class="school"><span>◈</span><b>实验空间平台</b><small>共享应用与数据接口联通</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 支持服务 ============ -->
+  <section class="section" id="support">
+    <div class="container support-grid">
+      <div><span class="eyebrow">13 / 在线支持与服务</span><h2 class="sec-title">全天候教学支持保障</h2><p class="sec-lead">5 名在线教学服务成员 + 2 名在线技术支持人员，工作日期间提供 8 小时/日在线服务。支持 500 人同时在线，带宽不足时自动降低素材清晰度。</p>
+        <div class="tech-tags"><span>Windows 10+</span><span>macOS 11+</span><span>iOS 15+</span><span>Android 11+</span><span>HarmonyOS 3+</span><span>免插件</span></div>
+      </div>
+      <div class="support-list">
+        <div><b>📞 热线电话与即时通讯</b><p>教学团队工作日 8 小时/日在线答疑，支持与服务群实时响应</p></div>
+        <div><b>📖 教学资源下载</b><p>实验指导书、操作视频、知识点课件库、习题库与测试卷</p></div>
+        <div><b>🔗 平台接口联通</b><p>按 2026 版技术接口规范，通过 HTTPS 与实验空间平台完成数据对接</p></div>
+        <div><b>🛡 网络安全保障</b><p>系统按信息安全等级保护二级要求建设，已完成定级备案</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 底部 CTA ============ -->
+  <section class="cta-band"><div class="container cta-inner"><div><h2>立即进入虚拟实验室</h2><p>拖动灯光，亲手设计一套商业布光方案，体验 AIGC 辅助的广告创意全流程。</p></div><a class="btn btn-light btn-lg" href="#lab">开始实验 →</a></div></section>
+</main>
+
+<!-- ============ 页脚（模仿 ilab-x） ============ -->
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><div class="fbrand">◈ AIGC 广告虚拟仿真实验</div><p>AIGC辅助的商业广告创意与拍摄制作虚拟仿真实验教学项目 · 山西应用科技学院</p><p class="fsmall">本页面为实验教学项目展示与交互演示站点，内容与数据来源于项目申报书。</p></div>
+    <div class="footer-col"><h4>项目信息</h4><p>申报方向：未来信息</p><p>专业类代码：1305 设计学类</p><p>推荐单位：山西省教育厅</p><p>负责人：阎伟</p></div>
+    <div class="footer-col"><h4>所属课程</h4><p>广告创意与策划</p><p>摄影摄像</p><p>数字视觉传播与 AI 应用</p></div>
+    <div class="footer-col"><h4>相关链接</h4><p><a href="https://www.ilab-x.com/" target="_blank" rel="noopener">实验空间平台 ↗</a></p><p><a href="#lab">虚拟实验室</a></p><p><a href="#resources">教学资源</a></p><p><a href="#support">支持服务</a></p></div>
+  </div>
+  <div class="container footer-bottom"><span>© 2026 山西应用科技学院 · AIGC 广告虚拟仿真实验教学项目</span><span>实验入口：ilab-x.com（待平台分配后正式填入）</span></div>
+</footer>
+
+<script type="module" src="./js/main.js?v=20250602"></script>
+</body>
+</html>
